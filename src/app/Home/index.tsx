@@ -1,4 +1,4 @@
-import { Image, View, TouchableOpacity, Text } from "react-native";
+import { Image, View, TouchableOpacity, Text, FlatList } from "react-native";
 import { ButtonAction } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Filter } from "@/components/Filter";
@@ -8,6 +8,15 @@ import { FilterStatus } from "@/types/FilterStatus";
 import { Item } from "@/components/Item";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE];
+const ITEMS = [
+  { id: "1", status: FilterStatus.DONE, description: "1 pacote de café" },
+  {
+    id: "2",
+    status: FilterStatus.PENDING,
+    description: "3 pacotes de macarrão",
+  },
+  { id: "3", status: FilterStatus.DONE, description: "3 batatas" },
+];
 
 export function Home() {
   return (
@@ -30,10 +39,22 @@ export function Home() {
           </TouchableOpacity>
         </View>
 
-        <Item
-          data={{ status: FilterStatus.DONE, description: "Café" }}
-          onRemove={() => console.log("Remover")}
-          onStatus={() => console.log("Mudar status")}
+        <FlatList
+          data={ITEMS}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Item
+              data={item}
+              onRemove={() => console.log("Remover")}
+              onStatus={() => console.log("Mudar status")}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={styles.sparator} />}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={() => (
+            <Text style={styles.empty}>Nenhum item aqui.</Text>
+          )}
         />
       </View>
     </View>
