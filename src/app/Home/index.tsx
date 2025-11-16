@@ -1,4 +1,5 @@
 import { Image, View, TouchableOpacity, Text, FlatList } from "react-native";
+import { use, useState } from "react";
 import { ButtonAction } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Filter } from "@/components/Filter";
@@ -19,19 +20,30 @@ const ITEMS = [
 ];
 
 export function Home() {
+  const [filter, setFilter] = useState(FilterStatus.PENDING);
+  const [description, setDescription] = useState("");
+
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("@/assets/logo.png")} />
 
       <View style={styles.form}>
-        <Input placeholder="O que você precisa comprar?" />
+        <Input
+          placeholder="O que você precisa comprar?"
+          onChangeText={setDescription}
+        />
         <ButtonAction title="Adicionar" />
       </View>
 
       <View style={styles.content}>
         <View style={styles.filter}>
           {FILTER_STATUS.map((status) => (
-            <Filter key={status} status={status} isActive />
+            <Filter
+              key={status}
+              status={status}
+              isActive={filter === status}
+              onPress={() => setFilter(status)}
+            />
           ))}
 
           <TouchableOpacity style={styles.clearButton}>
